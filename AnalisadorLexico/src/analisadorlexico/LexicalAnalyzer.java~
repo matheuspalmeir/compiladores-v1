@@ -35,9 +35,9 @@ class LexicalAnalyzer {
    * Translates characters to character classes
    */
   private static final String ZZ_CMAP_PACKED = 
-    "\11\0\1\1\1\1\1\14\1\14\1\1\22\0\1\1\7\0\1\6"+
-    "\1\7\1\4\1\3\1\12\1\2\1\12\1\5\1\10\11\11\7\0"+
-    "\72\0\1\0\1\13\10\0\1\14\u1fa2\0\1\14\1\14\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
+    "\11\0\1\1\1\1\1\15\1\15\1\1\22\0\1\1\7\0\1\7"+
+    "\1\10\1\4\1\3\1\13\1\2\1\13\1\5\1\11\11\12\7\0"+
+    "\72\6\1\0\1\14\10\0\1\15\u1fa2\0\1\15\1\15\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
 
   /** 
    * Translates characters to character classes
@@ -51,10 +51,10 @@ class LexicalAnalyzer {
 
   private static final String ZZ_ACTION_PACKED_0 =
     "\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7"+
-    "\1\10\2\11\1\0\1\12";
+    "\1\10\1\11\2\12\1\0\1\13";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[13];
+    int [] result = new int[14];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -79,11 +79,11 @@ class LexicalAnalyzer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\15\0\15\0\15\0\15\0\15\0\15\0\15"+
-    "\0\15\0\15\0\32\0\47\0\47";
+    "\0\0\0\16\0\16\0\16\0\16\0\16\0\16\0\34"+
+    "\0\16\0\16\0\16\0\52\0\70\0\70";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[13];
+    int [] result = new int[14];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -107,11 +107,11 @@ class LexicalAnalyzer {
 
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\2\1\3\1\4\1\5\1\6\1\7\1\10\1\11"+
-    "\1\12\1\13\1\2\1\3\26\0\2\13\2\14\11\0"+
-    "\2\15\3\0";
+    "\1\12\1\13\1\14\1\2\1\3\25\0\1\10\20\0"+
+    "\2\14\2\15\12\0\2\16\3\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[52];
+    int [] result = new int[70];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -149,10 +149,10 @@ class LexicalAnalyzer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\11\11\1\1\1\0\1\1";
+    "\1\0\6\11\1\1\3\11\1\1\1\0\1\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[13];
+    int [] result = new int[14];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -634,45 +634,49 @@ private void imprimir(String descricao, String lexema) {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
             { 
-                imprimir("INVALIDO,Caractere inválido", yytext());
+                imprimir("ERRO,Caractere inválido", yytext());
             }
-          case 11: break;
+          case 12: break;
           case 2: 
             { 
             }
-          case 12: break;
+          case 13: break;
           case 3: 
             { imprimir("OP_SUB,Operador de subtração", yytext());
             }
-          case 13: break;
+          case 14: break;
           case 4: 
             { imprimir("OP_SOMA,Operador de soma", yytext());
             }
-          case 14: break;
+          case 15: break;
           case 5: 
             { imprimir("OP_MULT,Operador de multiplicação", yytext());
             }
-          case 15: break;
+          case 16: break;
           case 6: 
             { imprimir("OP_DIV,Operador de divisão", yytext());
             }
-          case 16: break;
-          case 7: 
-            { imprimir("AP,Abre parêntese", yytext());
-            }
           case 17: break;
-          case 8: 
-            { imprimir("FP,Fecha parêntese", yytext());
+          case 7: 
+            { imprimir("INVALIDO,Caracter Inválido", yytext());
             }
           case 18: break;
-          case 9: 
-            { imprimir("INT,Número Inteiro", yytext());
+          case 8: 
+            { imprimir("AP,Abre parêntese", yytext());
             }
           case 19: break;
-          case 10: 
-            { imprimir("REAL,Número Real", yytext());
+          case 9: 
+            { imprimir("FP,Fecha parêntese", yytext());
             }
           case 20: break;
+          case 10: 
+            { imprimir("INT,Número Inteiro", yytext());
+            }
+          case 21: break;
+          case 11: 
+            { imprimir("REAL,Número Real", yytext());
+            }
+          case 22: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }

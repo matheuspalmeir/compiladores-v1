@@ -7,6 +7,8 @@ package analisadorlexico.Interface;
 
 import analisadorlexico.Controlador;
 import analisadorlexico.Simbolo;
+import java.awt.Color;
+import java.awt.Component;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -16,8 +18,11 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -29,12 +34,14 @@ public class InterfaceIO extends javax.swing.JFrame {
     public Controlador c;
     public ArrayList<Simbolo> saida;
     public DefaultTableModel model;
+    public String CLASS;
 
     /**
      * Creates new form InterfaceIO
      */
     public InterfaceIO() {
         initComponents();
+        this.CLASS = "";
 
     }
 
@@ -175,15 +182,14 @@ public class InterfaceIO extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2)
                     .addComponent(editorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
                     .addComponent(jScrollPane2))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addGap(0, 220, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,9 +253,9 @@ public class InterfaceIO extends javax.swing.JFrame {
             //Setando configurações iniciais da imagem para o arquivo
             writer.write(inputTextArea.getText());
             //if (arquivo.length() != 0) {
-              //  JOptionPane.showMessageDialog(null, "Arquivo foi gravado com sucesso!");
+            //  JOptionPane.showMessageDialog(null, "Arquivo foi gravado com sucesso!");
             //} else {
-              //  JOptionPane.showMessageDialog(null, "Arquivo não foi gravado! Algum erro ocorreu");
+            //  JOptionPane.showMessageDialog(null, "Arquivo não foi gravado! Algum erro ocorreu");
             //}
         } catch (IOException ex) {
             Logger.getLogger(InterfaceIO.class.getName()).log(Level.SEVERE, null, ex);
@@ -272,6 +278,7 @@ public class InterfaceIO extends javax.swing.JFrame {
         String outText = "";
         Object[] line = new Object[4];
         boolean erro = false;
+        ArrayList<Simbolo> erros = new ArrayList();
 
         this.model = (DefaultTableModel) tokenTable.getModel();
 
@@ -289,7 +296,8 @@ public class InterfaceIO extends javax.swing.JFrame {
                 line[2] = atual.getLinha();
                 line[3] = atual.getColuna();
 
-                if (atual.getToken().equals("INVALIDO")) {
+                if (atual.getToken().equals("INVÁLIDO")) {
+                    erros.add(atual);
                     erro = true;
                 }
 
@@ -298,18 +306,42 @@ public class InterfaceIO extends javax.swing.JFrame {
             }
 
             if (erro) {
-                outText += "\nAnálise Léxica encontrou erro (s)! Corrija e execute novamente!";
+                outputTextArea.setForeground(Color.RED);
+                outText += "\nAnálise Léxica encontrou erro (s)! Corrija e execute novamente!\n";
+                for (int i = 0; i < erros.size(); i++) {
+                    outText += erros.get(i).getLexema() + " , " + erros.get(i).getDescricao() + "\n";
+                }
+
             } else {
+                outputTextArea.setForeground(Color.GREEN);
                 outText += "\n Análise Léxica executada com sucesso! Léxica correta.";
             }
             this.tokenTable.setModel(model);
             outputTextArea.setText(outText);
+            colorirTabela();
 
         } catch (IOException ex) {
             Logger.getLogger(InterfaceIO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    public void colorirTabela() {
+        this.CLASS = "INVÁLIDO";
+        this.tokenTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                Color c = Color.WHITE;
+                Object texto = table.getValueAt(row, 1);
+                if (texto != null && CLASS.equals(texto.toString())) c = Color.RED;
+                    label.setBackground(c);
+                    tokenTable.setSelectionForeground(Color.GREEN);  
+                return label;
+            }
+        });
+    }
 
     /**
      * @param args the command line arguments
@@ -345,6 +377,7 @@ public class InterfaceIO extends javax.swing.JFrame {
             }
         });
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem abrirMenuItem;

@@ -51,10 +51,19 @@ OP_SUB = "-"
 OP_SOMA = "+"
 OP_MULT = "*"
 OP_DIV = "/"
-INVALIDO = [aA-zZ]*[aA-zZ]
-
+SIMBOLO_ESPECIAL = ":="| "<"| ">"| "<="| ">="| ";"
+PALAVRA_RESERVADA_BEGIN = "begin"
+PALAVRA_RESERVADA_END = "end"
+PALAVRA_RESERVADA_IF = "if"
+PALAVRA_RESERVADA_THEN = "then"
+PALAVRA_RESERVADA_ELSE = "else"
+PALAVRA_RESERVADA_ENDIF = "endif"
+PALAVRA_RESERVADA_AND = "and"
+PALAVRA_RESERVADA_OR = "or"
+IDENTIFICADOR = [a-zA-Z]([a-zA-Z]|[0-9])*
 AP = "("
 FP = ")"
+
 
 INT = 0|[1-9][0-9]*
 REAL = 0|[1-9][0-9]*[","|"."][0-9][0-9]*
@@ -70,7 +79,16 @@ REAL = 0|[1-9][0-9]*[","|"."][0-9][0-9]*
 {FP}		{ imprimir("FP,Fecha parêntese", yytext()); }
 {INT}		{ imprimir("INT,Número Inteiro", yytext()); }
 {REAL}   	{ imprimir("REAL,Número Real", yytext()); }
-{INVALIDO}      { imprimir("INVALIDO,Caracter Inválido", yytext()); }
+{SIMBOLO_ESPECIAL} { imprimir("SIMBOLO_ESPECIAL, Simbolo Especial", yytext());}
+{PALAVRA_RESERVADA_BEGIN} { imprimir("PALAVRA_RESERVADA_BEGIN, Palavra 'begin'", yytext());}
+{PALAVRA_RESERVADA_END} { imprimir("PALAVRA_RESERVADA_END, Palavra 'end'", yytext());}
+{PALAVRA_RESERVADA_IF} { imprimir("PALAVRA_RESERVADA_IF, Palavra 'if'", yytext());}
+{PALAVRA_RESERVADA_THEN} { imprimir("PALAVRA_RESERVADA_THEN, Palavra 'then'", yytext());}
+{PALAVRA_RESERVADA_ELSE} { imprimir("PALAVRA_RESERVADA_ELSE, Palavra 'else'", yytext()); }
+{PALAVRA_RESERVADA_ENDIF} { imprimir ("PALAVRA_RESERVADA_ENDIF, Palavra 'endif'" ,yytext()); }
+{PALAVRA_RESERVADA_AND} { imprimir("PALAVRA_RESERVADA_AND, Palavra 'and'" ,yytext()); }
+{PALAVRA_RESERVADA_OR}  { imprimir(" PALAVRA_RESERVADA_OR, Palavra 'or'" ,yytext()); }
+{IDENTIFICADOR} { imprimir("IDENTIFICADOR, Palavra é variável" ,yytext()); }
 
 
 . { throw new RuntimeException("Caractere inválido " + yytext()); }
