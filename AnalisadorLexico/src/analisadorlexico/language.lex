@@ -28,10 +28,14 @@ private void imprimir(String descricao, String lexema) {
     atual.setDescricao(list[1]);
     atual.setToken(list[0]);
     atual.setLexema(lexema);
+
+    imprimir("INVÁLIDO,Caractere Inválido", yytext());
     
     this.tabelaSimbolos.add(atual);
     //System.out.println(lexema + " - " + descricao);
 }
+
+   
 
 
 
@@ -51,7 +55,7 @@ OP_SUB = "-"
 OP_SOMA = "+"
 OP_MULT = "*"
 OP_DIV = "/"
-SIMBOLO_ESPECIAL = ":="| "<"| ">"| "<="| ">="| ";"
+SIMBOLO_ESPECIAL = ":="| "<"| ">"| "<="| ">="| ";" | "," | ":"
 PALAVRA_RESERVADA_BEGIN = "begin"
 PALAVRA_RESERVADA_END = "end"
 PALAVRA_RESERVADA_IF = "if"
@@ -59,7 +63,13 @@ PALAVRA_RESERVADA_THEN = "then"
 PALAVRA_RESERVADA_ELSE = "else"
 PALAVRA_RESERVADA_ENDIF = "endif"
 PALAVRA_RESERVADA_AND = "and"
+PALAVRA_RESERVADA_AND = "div"
 PALAVRA_RESERVADA_OR = "or"
+PALAVRA_RESERVADA_WHILE = "while"
+PALAVRA_RESERVADA_PROCEDURE = "procedure"
+PALAVRA_RESERVADA_BOOLEAN = "boolean"
+PALAVRA_RESERVADA_TRUE = "true";
+PALAVRA_RESERVADA_FALSE = "false"; 
 IDENTIFICADOR = [a-zA-Z]([a-zA-Z]|[0-9])*
 AP = "("
 FP = ")"
@@ -67,6 +77,16 @@ FP = ")"
 
 INT = 0|[1-9][0-9]*
 REAL = 0|[1-9][0-9]*[","|"."][0-9][0-9]*
+
+TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
+EndOfLineComment     = "//" {InputCharacter}* {LineTerminator}?
+DocumentationComment = "/**" {CommentContent} "*"+ "/"
+CommentContent       = ( [^*] | \*+ [^/*] )*
+
+LineTerminator = \r|\n|\r\n
+InputCharacter = [^\r\n]
+
+COMENTARIO = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
 
 %%
 
@@ -82,13 +102,20 @@ REAL = 0|[1-9][0-9]*[","|"."][0-9][0-9]*
 {SIMBOLO_ESPECIAL} { imprimir("SIMBOLO_ESPECIAL, Simbolo Especial", yytext());}
 {PALAVRA_RESERVADA_BEGIN} { imprimir("PALAVRA_RESERVADA_BEGIN, Palavra 'begin'", yytext());}
 {PALAVRA_RESERVADA_END} { imprimir("PALAVRA_RESERVADA_END, Palavra 'end'", yytext());}
+{PALAVRA_RESERVADA_AND} { imprimir("PALAVRA_RESERVADA_DIV, Palavra 'div'", yytext());}
 {PALAVRA_RESERVADA_IF} { imprimir("PALAVRA_RESERVADA_IF, Palavra 'if'", yytext());}
 {PALAVRA_RESERVADA_THEN} { imprimir("PALAVRA_RESERVADA_THEN, Palavra 'then'", yytext());}
 {PALAVRA_RESERVADA_ELSE} { imprimir("PALAVRA_RESERVADA_ELSE, Palavra 'else'", yytext()); }
 {PALAVRA_RESERVADA_ENDIF} { imprimir ("PALAVRA_RESERVADA_ENDIF, Palavra 'endif'" ,yytext()); }
 {PALAVRA_RESERVADA_AND} { imprimir("PALAVRA_RESERVADA_AND, Palavra 'and'" ,yytext()); }
 {PALAVRA_RESERVADA_OR}  { imprimir(" PALAVRA_RESERVADA_OR, Palavra 'or'" ,yytext()); }
+{PALAVRA_RESERVADA_WHILE} { imprimir(" PALAVRA_RESERVADA_WHILE, Palavra 'while'" ,yytext()); }
+{PALAVRA_RESERVADA_PROCEDURE} { imprimir(" PALAVRA_RESERVADA_PROCEDURE, Palavra 'procedure'" ,yytext()); }
+{PALAVRA_RESERVADA_BOOLEAN} { imprimir(" PALAVRA_RESERVADA_BOOLEAN, Palavra 'boolean'" ,yytext()); }
+{PALAVRA_RESERVADA_TRUE} { imprimir(" PALAVRA_RESERVADA_TRUE, Palavra 'true'" ,yytext()); }
+{PALAVRA_RESERVADA_FALSE} { imprimir(" PALAVRA_RESERVADA_FALSE, Palavra 'false'" ,yytext()); }
 {IDENTIFICADOR} { imprimir("IDENTIFICADOR, Palavra é variável" ,yytext()); }
+{COMENTARIO} { imprimir("COMENTÁRIO, Comentário inserido" ,yytext()); }
 
 
 . { throw new RuntimeException("Caractere inválido " + yytext()); }

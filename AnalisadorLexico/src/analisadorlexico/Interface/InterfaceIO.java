@@ -42,6 +42,7 @@ public class InterfaceIO extends javax.swing.JFrame {
     public InterfaceIO() {
         initComponents();
         this.CLASS = "";
+        this.outputTextArea.setEditable(false);
 
     }
 
