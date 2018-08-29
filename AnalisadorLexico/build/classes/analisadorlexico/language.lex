@@ -29,7 +29,7 @@ private void imprimir(String descricao, String lexema) {
     atual.setToken(list[0]);
     atual.setLexema(lexema);
 
-    imprimir("INVÁLIDO,Caractere Inválido", yytext());
+imprimir("INVÁLIDO,Caractere inválido", yytext());
     
     this.tabelaSimbolos.add(atual);
     //System.out.println(lexema + " - " + descricao);
@@ -75,7 +75,7 @@ AP = "("
 FP = ")"
 
 
-INT = 0|[1-9][0-9]*
+INT = 0 | [1-9][0-9]*
 REAL = 0|[1-9][0-9]*[","|"."][0-9][0-9]*
 
 TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
