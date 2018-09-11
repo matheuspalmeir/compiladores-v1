@@ -76,6 +76,7 @@ public class InterfaceIO extends javax.swing.JFrame {
         sairMenuItem = new javax.swing.JMenuItem();
         lexicoMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        clearMenuItem = new javax.swing.JMenuItem();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -171,6 +172,15 @@ public class InterfaceIO extends javax.swing.JFrame {
         });
         lexicoMenu.add(jMenuItem1);
 
+        clearMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, java.awt.event.InputEvent.SHIFT_MASK));
+        clearMenuItem.setText("Limpar Execução");
+        clearMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearMenuItemActionPerformed(evt);
+            }
+        });
+        lexicoMenu.add(clearMenuItem);
+
         jMenuBar1.add(lexicoMenu);
 
         setJMenuBar(jMenuBar1);
@@ -184,11 +194,11 @@ public class InterfaceIO extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2)
                     .addComponent(editorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
                     .addComponent(jScrollPane2))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                         .addComponent(jLabel3)
                         .addGap(290, 290, 290))
                     .addGroup(layout.createSequentialGroup()
@@ -331,6 +341,14 @@ public class InterfaceIO extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void clearMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearMenuItemActionPerformed
+        this.saida.clear();
+        this.model.setRowCount(0);
+        this.outputTextArea.setText("");
+        
+        
+    }//GEN-LAST:event_clearMenuItemActionPerformed
+
     public void colorirTabela() {
         this.CLASS = "INVÁLIDO";
         this.tokenTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
@@ -387,6 +405,7 @@ public class InterfaceIO extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem abrirMenuItem;
     private javax.swing.JMenu arquivoMenu;
+    private javax.swing.JMenuItem clearMenuItem;
     private javax.swing.JLabel editorLabel;
     private javax.swing.JTextArea inputTextArea;
     private javax.swing.JLabel jLabel2;

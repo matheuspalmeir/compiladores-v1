@@ -30,6 +30,17 @@ private void imprimir(String descricao, String lexema) {
     atual.setLexema(lexema);
 
 imprimir("INVÁLIDO,Caractere inválido", yytext());
+
+
+                        try {
+                            int num = Integer.parseInt(yytext());
+                            if (num < 2147483646) {
+                                imprimir("INT,Número Inteiro", yytext());
+                            }
+                        } catch (Exception e) {
+                            imprimir("INVÁLIDO,Inteiro maior que o Limite", yytext());
+                            System.out.println(e.getMessage());
+                        }
     
     this.tabelaSimbolos.add(atual);
     //System.out.println(lexema + " - " + descricao);
@@ -63,13 +74,14 @@ PALAVRA_RESERVADA_THEN = "then"
 PALAVRA_RESERVADA_ELSE = "else"
 PALAVRA_RESERVADA_ENDIF = "endif"
 PALAVRA_RESERVADA_AND = "and"
-PALAVRA_RESERVADA_AND = "div"
+PALAVRA_RESERVADA_DIV = "div"
 PALAVRA_RESERVADA_OR = "or"
 PALAVRA_RESERVADA_WHILE = "while"
 PALAVRA_RESERVADA_PROCEDURE = "procedure"
 PALAVRA_RESERVADA_BOOLEAN = "boolean"
 PALAVRA_RESERVADA_TRUE = "true";
 PALAVRA_RESERVADA_FALSE = "false"; 
+PALAVRA_RESERVADA_PROGRAM = "program"
 IDENTIFICADOR = [a-zA-Z]([a-zA-Z]|[0-9])*
 AP = "("
 FP = ")"
@@ -102,7 +114,7 @@ COMENTARIO = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
 {SIMBOLO_ESPECIAL} { imprimir("SIMBOLO_ESPECIAL, Simbolo Especial", yytext());}
 {PALAVRA_RESERVADA_BEGIN} { imprimir("PALAVRA_RESERVADA_BEGIN, Palavra 'begin'", yytext());}
 {PALAVRA_RESERVADA_END} { imprimir("PALAVRA_RESERVADA_END, Palavra 'end'", yytext());}
-{PALAVRA_RESERVADA_AND} { imprimir("PALAVRA_RESERVADA_DIV, Palavra 'div'", yytext());}
+{PALAVRA_RESERVADA_DIV} { imprimir("PALAVRA_RESERVADA_DIV, Palavra 'div'", yytext());}
 {PALAVRA_RESERVADA_IF} { imprimir("PALAVRA_RESERVADA_IF, Palavra 'if'", yytext());}
 {PALAVRA_RESERVADA_THEN} { imprimir("PALAVRA_RESERVADA_THEN, Palavra 'then'", yytext());}
 {PALAVRA_RESERVADA_ELSE} { imprimir("PALAVRA_RESERVADA_ELSE, Palavra 'else'", yytext()); }
@@ -114,6 +126,7 @@ COMENTARIO = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
 {PALAVRA_RESERVADA_BOOLEAN} { imprimir(" PALAVRA_RESERVADA_BOOLEAN, Palavra 'boolean'" ,yytext()); }
 {PALAVRA_RESERVADA_TRUE} { imprimir(" PALAVRA_RESERVADA_TRUE, Palavra 'true'" ,yytext()); }
 {PALAVRA_RESERVADA_FALSE} { imprimir(" PALAVRA_RESERVADA_FALSE, Palavra 'false'" ,yytext()); }
+{PALAVRA_RESERVADA_PROGRAM} {imprimir("PALAVRA_RESERVADA_PROGRAM, Palavra 'program'", yytext()); }
 {IDENTIFICADOR} { imprimir("IDENTIFICADOR, Palavra é variável" ,yytext()); }
 {COMENTARIO} { imprimir("COMENTÁRIO, Comentário inserido" ,yytext()); }
 
