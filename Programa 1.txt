@@ -8,7 +8,7 @@ boolean d, e, f;
 begin
 	a:=1;
 	if (a<1)
-		a:=12
+		a:=12;
 end;
 
 begin
@@ -25,12 +25,12 @@ begin
 	begin
 		a:=20;
 		b:=10*c;
-		c:=a div b
+		c:=a div b;
 	end;
 	while (a>1)
 	begin
 		if (b>10)
 			b:=2;
-		a:=a-1
-	end
-end
+		a:=a-1;
+	end;
+end.

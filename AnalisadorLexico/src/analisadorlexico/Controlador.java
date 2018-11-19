@@ -425,32 +425,32 @@ public class Controlador {
                     if (auxiliar.getToken().equals("SIMBOLO_ESPECIAL") && auxiliar.getLexema().equals(";")) {
                         this.pilhaLeitura.add(auxiliar);
                         i++;
-                        estado = 5;  //Estado que define um comando composto de um begin 
-                        break;
-                    } else {
-                        
-                        if (auxiliar.getToken().equals("SIMBOLO_FINAL")) {
-                            this.pilhaLeitura.add(auxiliar);
-                            i++;
-                            if (i == this.pilhaLeitura.size()) {
-                                System.out.println("Completado com sucesso!");
-                                return;
-                            } else {
-                                erro = new Erro();
-                                erro.setDescricao("Simbolo Final . encontrado em bloco");
-                                erro.setColuna(auxiliar.getColuna());
-                                erro.setLinha(auxiliar.getLinha());
-                                erro.setSimboloEsperado(auxiliar);
-                                erro.setPosicaoTabela(i);
-                                getErros().add(erro);
-                                estado = -1;
-                                i++;
-                                break;
-                            }
+                        estado = 5;
+                        break;//Estado que define um comando composto de um begin 
+                    }
+//                    else {
+//                            //Erro de final de atribuição falta simbolo especial!
+//                            erro = new Erro();
+//                            erro.setDescricao("Simbolo especial ; não encontrado");
+//                            erro.setColuna(auxiliar.getColuna());
+//                            erro.setLinha(auxiliar.getLinha());
+//                            erro.setSimboloEsperado(auxiliar);
+//                            erro.setPosicaoTabela(i);
+//                            getErros().add(erro);
+//                            estado = -1;
+//                            i++;
+//                            break;
+//                        }
+
+                    if (auxiliar.getToken().equals("SIMBOLO_FINAL")) {
+                        this.pilhaLeitura.add(auxiliar);
+                        i++;
+                        if (i == this.pilhaLeitura.size()) {
+                            System.out.println("Completado com sucesso!");
+                            return;
                         } else {
-                            //Erro de final de atribuição falta simbolo especial!
                             erro = new Erro();
-                            erro.setDescricao("Simbolo especial ; não encontrado");
+                            erro.setDescricao("Simbolo Final . encontrado em bloco");
                             erro.setColuna(auxiliar.getColuna());
                             erro.setLinha(auxiliar.getLinha());
                             erro.setSimboloEsperado(auxiliar);
@@ -462,9 +462,50 @@ public class Controlador {
                         }
                     }
 
-                }
-                case 7: {   //Estado que define uma expressão 
                     if (auxiliar.getToken().equals("OP_SOMA") || auxiliar.getToken().equals("OP_SUB") || auxiliar.getToken().equals("OP_DIV") || auxiliar.getToken().equals("OP_MULT")) {
+                        this.pilhaLeitura.add(auxiliar);
+                        i++;
+                        auxiliar = this.tabelaSimbolos.get(i);
+                        if (auxiliar.getToken().equals("IDENTIFICADOR") || auxiliar.getToken().equals("NUMERO_REAL") || auxiliar.getToken().equals("NUMERO_INT")) {
+                            this.pilhaLeitura.add(auxiliar);
+                            i++;
+                            auxiliar = this.tabelaSimbolos.get(i);
+                            if (auxiliar.getToken().equals("SIMBOLO_ESPECIAL") && auxiliar.getLexema().equals(";")) {
+                                this.pilhaLeitura.add(auxiliar);
+                                System.out.println("Entrei aqui!");
+                                i++;
+                                estado = 5;
+                                break;// Retorna ao estado que define um COMANDO
+                            } else {
+                                erro = new Erro();
+                                erro.setDescricao("SIMBOLO_ESPECIAL ; não encontrado!");
+                                erro.setColuna(auxiliar.getColuna());
+                                erro.setLinha(auxiliar.getLinha());
+                                erro.setSimboloEsperado(auxiliar);
+                                erro.setPosicaoTabela(i);
+                                getErros().add(erro);
+                                estado = -1;
+                                i++;
+                                break;
+                            }
+                        } else {
+                            //Erro falta um identificador ou um valor na expressao
+                            erro = new Erro();
+                            erro.setDescricao("Variável ou valor int/real não encontrado!");
+                            erro.setColuna(auxiliar.getColuna());
+                            erro.setLinha(auxiliar.getLinha());
+                            erro.setSimboloEsperado(auxiliar);
+                            erro.setPosicaoTabela(i);
+                            getErros().add(erro);
+                            estado = -1;
+                            i++;
+                            break;
+                        }
+                    }
+                }
+
+                case 7: {   //Estado que define uma expressão 
+                    if (auxiliar.getToken().equals("OP_SOMA") || auxiliar.getToken().equals("OP_SUB") || auxiliar.getToken().equals("OP_DIV") || auxiliar.getToken().equals("OP_MULT") || auxiliar.getToken().equals("PALAVRA_RESERVADA_DIV") || auxiliar.getToken().equals("PALAVRA_RESERVADA_DIV")) {
                         this.pilhaLeitura.add(auxiliar);
                         i++;
                         auxiliar = this.tabelaSimbolos.get(i);
