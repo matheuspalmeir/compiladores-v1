@@ -1,5 +1,4 @@
 program correto;
-end;
 int a, b, c;
 boolean d, e, f;
 
@@ -10,7 +9,7 @@ begin
 	a:=1;
 	if (a<1)
 		a:=12
-
+end;
 
 begin
 	a:=2;
