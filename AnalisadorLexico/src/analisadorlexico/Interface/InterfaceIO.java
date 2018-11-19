@@ -6,6 +6,7 @@
 package analisadorlexico.Interface;
 
 import analisadorlexico.Controlador;
+import analisadorlexico.Erro;
 import analisadorlexico.Simbolo;
 import java.awt.Color;
 import java.awt.Component;
@@ -35,6 +36,8 @@ public class InterfaceIO extends javax.swing.JFrame {
     public ArrayList<Simbolo> saida;
     public DefaultTableModel model;
     public String CLASS;
+    public boolean analise_lexica_ok;
+    public boolean analise_sintatica_ok;
 
     /**
      * Creates new form InterfaceIO
@@ -43,8 +46,10 @@ public class InterfaceIO extends javax.swing.JFrame {
         initComponents();
         this.CLASS = "";
         this.outputTextArea.setEditable(false);
-        this.setExtendedState(MAXIMIZED_BOTH);
-        
+        //this.setExtendedState(MAXIMIZED_BOTH);
+        this.analise_lexica_ok = false;
+        this.analise_sintatica_ok = false;
+
     }
 
     /**
@@ -77,6 +82,13 @@ public class InterfaceIO extends javax.swing.JFrame {
         lexicoMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         clearMenuItem = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        executarMenuItem = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -183,6 +195,49 @@ public class InterfaceIO extends javax.swing.JFrame {
 
         jMenuBar1.add(lexicoMenu);
 
+        jMenu1.setText("Analisador Sintático");
+
+        executarMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F9, 0));
+        executarMenuItem.setText("Executar ");
+        executarMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                executarMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(executarMenuItem);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Analisador Semântico");
+
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F10, 0));
+        jMenuItem3.setText("Executar");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
+
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Compilar ");
+
+        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F12, 0));
+        jMenuItem4.setText("Executar");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem4);
+
+        jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, java.awt.event.InputEvent.SHIFT_MASK));
+        jMenuItem5.setText("Limpar Execução");
+        jMenu3.add(jMenuItem5);
+
+        jMenuBar1.add(jMenu3);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -288,11 +343,80 @@ public class InterfaceIO extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         String expr = inputTextArea.getText();
+        if (expr.equals("")) {
+            JOptionPane.showMessageDialog(null, "Código não foi inserido ou digitado!");
+        } else {
+            c = new Controlador(expr);
+            String outText = "";
+            Object[] line = new Object[4];
+            boolean erro = false;
+            ArrayList<Simbolo> erros = new ArrayList();
+
+            this.model = (DefaultTableModel) tokenTable.getModel();
+            model.setRowCount(0);
+
+            try {
+                this.saida = c.analiseLexica();
+                //c.imprimirSimbolos();
+
+                for (int i = 0; i < this.saida.size(); i++) {
+                    Simbolo atual;
+                    atual = this.saida.get(i);
+
+                    //outText += atual.getLexema() + " , " + atual.getDescricao() + "\n";
+                    line[1] = atual.getToken();
+                    line[0] = atual.getLexema();
+                    line[2] = atual.getLinha();
+                    line[3] = atual.getColuna();
+
+                    if (atual.getToken().equals("INVÁLIDO")) {
+                        erros.add(atual);
+                        erro = true;
+                    }
+
+                    this.model.addRow(line);
+
+                }
+
+                if (erro) {
+                    outputTextArea.setForeground(Color.RED);
+                    outText += "\nAnálise Léxica encontrou erro (s)! Corrija e execute novamente!\n";
+                    for (int i = 0; i < erros.size(); i++) {
+                        outText += erros.get(i).getLexema() + " , " + erros.get(i).getDescricao() + "\n";
+                    }
+
+                } else {
+                    outputTextArea.setForeground(Color.GREEN);
+                    outText += "\n Análise Léxica executada com sucesso! Léxica correta.";
+                    this.analise_lexica_ok = true;
+                }
+                this.tokenTable.setModel(model);
+                outputTextArea.setText(outText);
+                colorirTabela();
+
+            } catch (IOException ex) {
+                Logger.getLogger(InterfaceIO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void clearMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearMenuItemActionPerformed
+        this.saida.clear();
+        this.model.setRowCount(0);
+        this.outputTextArea.setText("");
+
+
+    }//GEN-LAST:event_clearMenuItemActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        String expr = inputTextArea.getText();
         c = new Controlador(expr);
         String outText = "";
         Object[] line = new Object[4];
         boolean erro = false;
-        ArrayList<Simbolo> erros = new ArrayList();
+        ArrayList<Simbolo> erros_lexicos = new ArrayList();
+        ArrayList<Erro> erros_sintaticos = new ArrayList();
 
         this.model = (DefaultTableModel) tokenTable.getModel();
         model.setRowCount(0);
@@ -312,7 +436,7 @@ public class InterfaceIO extends javax.swing.JFrame {
                 line[3] = atual.getColuna();
 
                 if (atual.getToken().equals("INVÁLIDO")) {
-                    erros.add(atual);
+                    erros_lexicos.add(atual);
                     erro = true;
                 }
 
@@ -323,8 +447,8 @@ public class InterfaceIO extends javax.swing.JFrame {
             if (erro) {
                 outputTextArea.setForeground(Color.RED);
                 outText += "\nAnálise Léxica encontrou erro (s)! Corrija e execute novamente!\n";
-                for (int i = 0; i < erros.size(); i++) {
-                    outText += erros.get(i).getLexema() + " , " + erros.get(i).getDescricao() + "\n";
+                for (int i = 0; i < erros_lexicos.size(); i++) {
+                    outText += erros_lexicos.get(i).getLexema() + " , " + erros_lexicos.get(i).getDescricao() + "\n";
                 }
 
             } else {
@@ -339,15 +463,38 @@ public class InterfaceIO extends javax.swing.JFrame {
             Logger.getLogger(InterfaceIO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
-    private void clearMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearMenuItemActionPerformed
-        this.saida.clear();
-        this.model.setRowCount(0);
-        this.outputTextArea.setText("");
-        
-        
-    }//GEN-LAST:event_clearMenuItemActionPerformed
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        if (analise_sintatica_ok) {
+
+        } else {
+            JOptionPane.showMessageDialog(null, "A Análise Sintática não foi executada! Não é possível efetuar a analise sintática.");
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void executarMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executarMenuItemActionPerformed
+        if (analise_lexica_ok) {
+
+            String outText = "";
+            boolean erro = false;
+
+            ArrayList<Erro> erros_sintaticos = new ArrayList();
+
+            c.analiseSintatica();
+            erros_sintaticos = c.getErros();
+            if (erros_sintaticos.isEmpty()) {
+                outputTextArea.setForeground(Color.RED);
+                outText += "\n Análise Sintática apresentou erros.";
+                for (int i = 0; i < erros_sintaticos.size(); i++) {
+                    outText += "Simbolo esperado:" + erros_sintaticos.get(i).getSimboloEsperado() + " , " + erros_sintaticos.get(i).getDescricao() + "\n";
+                }
+            }
+            outputTextArea.setText(outText);
+        } else {
+            JOptionPane.showMessageDialog(null, "A Análise Léxica não foi executada! Não é possível efetuar a analise sintática.");
+        }
+    }//GEN-LAST:event_executarMenuItemActionPerformed
 
     public void colorirTabela() {
         this.CLASS = "INVÁLIDO";
@@ -358,9 +505,11 @@ public class InterfaceIO extends javax.swing.JFrame {
                 JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 Color c = Color.WHITE;
                 Object texto = table.getValueAt(row, 1);
-                if (texto != null && CLASS.equals(texto.toString())) c = Color.RED;
-                    label.setBackground(c);
-                    tokenTable.setSelectionForeground(Color.GREEN);  
+                if (texto != null && CLASS.equals(texto.toString())) {
+                    c = Color.RED;
+                }
+                label.setBackground(c);
+                tokenTable.setSelectionForeground(Color.GREEN);
                 return label;
             }
         });
@@ -407,11 +556,18 @@ public class InterfaceIO extends javax.swing.JFrame {
     private javax.swing.JMenu arquivoMenu;
     private javax.swing.JMenuItem clearMenuItem;
     private javax.swing.JLabel editorLabel;
+    private javax.swing.JMenuItem executarMenuItem;
     private javax.swing.JTextArea inputTextArea;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

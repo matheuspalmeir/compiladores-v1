@@ -10,17 +10,45 @@ package analisadorlexico;
  * @author Matheus Palmeira
  */
 public class Erro {
-
     private String descricao;
+    private int posicaoTabela; 
     private int linha;
     private int coluna;
-    private String tokenEsperado;
+    private Simbolo simboloEsperado;
 
+    
+        /**
+     * @return the posicaoTabela
+     */
+    public int getPosicaoTabela() {
+        return posicaoTabela;
+    }
+
+    /**
+     * @param posicaoTabela the posicaoTabela to set
+     */
+    public void setPosicaoTabela(int posicaoTabela) {
+        this.posicaoTabela = posicaoTabela;
+    }
     /**
      * @return the descricao
      */
     public String getDescricao() {
         return descricao;
+    }
+    
+        /**
+     * @return the simboloEsperado
+     */
+    public Simbolo getSimboloEsperado() {
+        return simboloEsperado;
+    }
+
+    /**
+     * @param simboloEsperado the simboloEsperado to set
+     */
+    public void setSimboloEsperado(Simbolo simboloEsperado) {
+        this.simboloEsperado = simboloEsperado;
     }
 
     /**
@@ -56,19 +84,5 @@ public class Erro {
      */
     public void setColuna(int coluna) {
         this.coluna = coluna;
-    }
-
-    /**
-     * @return the tokenEsperado
-     */
-    public String getTokenEsperado() {
-        return tokenEsperado;
-    }
-
-    /**
-     * @param tokenEsperado the tokenEsperado to set
-     */
-    public void setTokenEsperado(String tokenEsperado) {
-        this.tokenEsperado = tokenEsperado;
     }
 }

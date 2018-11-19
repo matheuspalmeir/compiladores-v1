@@ -10,6 +10,7 @@ package analisadorlexico;
  * @author Matheus Palmeira
  */
 public class Simbolo {
+
     private String token;
     private String lexema; 
     private String descricao;
@@ -17,9 +18,23 @@ public class Simbolo {
     private int coluna;
     private String first; 
     private String follow;
+    private int estado_atual; 
     
     
     
+        /**
+     * @return the estado_atual
+     */
+    public int getEstado_atual() {
+        return estado_atual;
+    }
+
+    /**
+     * @param estado_atual the estado_atual to set
+     */
+    public void setEstado_atual(int estado_atual) {
+        this.estado_atual = estado_atual;
+    }
         /**
      * @return the first
      */

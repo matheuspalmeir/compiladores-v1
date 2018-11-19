@@ -1,4 +1,5 @@
 program correto;
+end;
 int a, b, c;
 boolean d, e, f;
 
@@ -9,16 +10,18 @@ begin
 	a:=1;
 	if (a<1)
 		a:=12
-end;
+
 
 begin
-	a:=276575664534535435657676565456554353436565765546543;
+	a:=2;
 	b:=10;
 	c:=11;
 	a:=b+c;
 	d:=true;
 	e:=false;
 	f:=true;
+	read(a);
+	write(b);
 	if (d)
 	begin
 		a:=20;
@@ -31,4 +34,4 @@ begin
 			b:=2;
 		a:=a-1
 	end
-end.
+end
