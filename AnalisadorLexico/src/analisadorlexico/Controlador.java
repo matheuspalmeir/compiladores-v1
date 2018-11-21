@@ -364,16 +364,25 @@ public class Controlador {
                                 }
                             }
                         } else {
-                            erro = new Erro();
-                            erro.setDescricao("Atribuição não encontrada! Falta ':=' ");
-                            erro.setColuna(auxiliar.getColuna());
-                            erro.setLinha(auxiliar.getLinha());
-                            erro.setSimboloEsperado(auxiliar);
-                            erro.setPosicaoTabela(i);
-                            getErros().add(erro);
-                            estado = -1;
-                            i++;
-                            break;
+                            if (auxiliar.getToken().equals("AP")) {
+                                this.pilhaLeitura.add(auxiliar);
+                                i++;
+                                auxiliar = this.tabelaSimbolos.get(i);
+                                estado = 11;
+                                break;
+                            } else {
+                                erro = new Erro();
+                                erro.setDescricao("Atribuição não encontrada! Falta o (");
+                                erro.setColuna(auxiliar.getColuna());
+                                erro.setLinha(auxiliar.getLinha());
+                                erro.setSimboloEsperado(auxiliar);
+                                erro.setPosicaoTabela(i);
+                                getErros().add(erro);
+                                estado = -1;
+                                i++;
+                                break;
+
+                            }
                         }
                     }
 
@@ -387,7 +396,14 @@ public class Controlador {
                     if (auxiliar.getToken().equals("PALAVRA_RESERVADA_WHILE")) {
                         this.pilhaLeitura.add(auxiliar);
                         i++;
-                        estado = 8; //Estado que define um while
+                        estado = 9; //Estado que define um if, then, else
+                        break;
+                    }
+                    
+                    if (auxiliar.getToken().equals("PALAVRA_RESERVADA_ELSE")) {
+                        this.pilhaLeitura.add(auxiliar);
+                        i++;
+                        estado = 5; //Estado que define um while
                         break;
                     }
 
@@ -634,6 +650,60 @@ public class Controlador {
                         estado = -1;
                         i++;
                         break;
+                    }
+                }
+
+                case 11: {
+                    if (auxiliar.getToken().equals("IDENTIFICADOR")) {
+                        this.pilhaLeitura.add(auxiliar);
+                        i++;
+                        auxiliar = this.tabelaSimbolos.get(i);
+                        if (auxiliar.getToken().equals("FP")) {
+                            this.pilhaLeitura.add(auxiliar);
+                            i++;
+                            auxiliar = this.tabelaSimbolos.get(i);
+                            if (auxiliar.getToken().equals("SIMBOLO_ESPECIAL")) {
+                                this.pilhaLeitura.add(auxiliar);
+                                i++;
+                                auxiliar = this.tabelaSimbolos.get(i);
+                                estado = 5;
+                                break;
+                            } else {
+                                erro = new Erro();
+                                erro.setDescricao("SIMBOLO ESPECIAL ; não foi não encontrado");
+                                erro.setColuna(auxiliar.getColuna());
+                                erro.setLinha(auxiliar.getLinha());
+                                erro.setSimboloEsperado(auxiliar);
+                                erro.setPosicaoTabela(i);
+                                getErros().add(erro);
+                                estado = -1;
+                                i++;
+                                break;
+                            }
+                        } else {
+                            erro = new Erro();
+                            erro.setDescricao("Fecha parenteses ) não foi não encontrado");
+                            erro.setColuna(auxiliar.getColuna());
+                            erro.setLinha(auxiliar.getLinha());
+                            erro.setSimboloEsperado(auxiliar);
+                            erro.setPosicaoTabela(i);
+                            getErros().add(erro);
+                            estado = -1;
+                            i++;
+                            break;
+                        }
+                    } else {
+                        erro = new Erro();
+                        erro.setDescricao("Identificador não foi não encontrado");
+                        erro.setColuna(auxiliar.getColuna());
+                        erro.setLinha(auxiliar.getLinha());
+                        erro.setSimboloEsperado(auxiliar);
+                        erro.setPosicaoTabela(i);
+                        getErros().add(erro);
+                        estado = -1;
+                        i++;
+                        break;
+
                     }
                 }
                 case -1: {
