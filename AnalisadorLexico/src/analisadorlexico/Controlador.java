@@ -711,6 +711,45 @@ NUMERO_REAL = 0|[1-9][0-9]*[","|"."][0-9][0-9]*
         }
     }
 
+    public void mapeiafirstfollow() {
+        for (int i = 0; i < this.tabelaSimbolos.size(); i++) {
+            Simbolo atual;
+            atual = this.tabelaSimbolos.get(i);
+            switch (atual.getToken()) {
+                case "PALAVRA_RESERVADA_PROGRAM":
+                    atual.setFollow("IDENTIFICADOR");
+                    atual.setFirst("$");
+                    break;
+
+                case "IDENTIFICADOR":
+                    atual.setFollow("SIMBOLO_ESPECIAL");
+                    atual.setFirst("");
+                    break;
+
+                case "PALAVRA_RESERVADA_INT":
+                    atual.setFollow("IDENTIFICADOR");
+                    atual.setFirst("SIMBOLO_ESPECIAL"); //
+                    break;
+
+                case "PALAVRA_RESERVADA_FLOAT":
+                    atual.setFollow("IDENTIFICADOR");
+                    atual.setFirst("SIMBOLO_ESPECIAL"); //
+                    break;
+
+                case "PALAVRA_RESERVADA_BEGIN":
+                    atual.setFollow("IDENTIFICADOR");
+                    atual.setFirst("SIMBOLO_ESPECIAL"); //
+                    break;
+
+                case "SIMBOLO_ESPECIAL":
+                    atual.setFollow("BLOCO");
+                    atual.setFirst("SIMBOLO_ESPECIAL"); //
+                    break;
+            }
+
+        }
+    }
+
     /**
      * @return the expr
      */
