@@ -450,6 +450,7 @@ public class InterfaceIO extends javax.swing.JFrame {
                 for (int i = 0; i < erros_lexicos.size(); i++) {
                     outText += erros_lexicos.get(i).getLexema() + " , " + erros_lexicos.get(i).getDescricao() + "\n";
                 }
+                analise_lexica_ok = false;
 
             } else {
                 outputTextArea.setForeground(Color.GREEN);
@@ -467,9 +468,9 @@ public class InterfaceIO extends javax.swing.JFrame {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         if (analise_sintatica_ok) {
-
+            
         } else {
-            JOptionPane.showMessageDialog(null, "A Análise Sintática não foi executada! Não é possível efetuar a analise sintática.");
+            JOptionPane.showMessageDialog(null, "A Análise Sintática não foi executada! Não é possível efetuar a analise semântica.");
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
@@ -483,12 +484,19 @@ public class InterfaceIO extends javax.swing.JFrame {
 
             c.analiseSintatica();
             erros_sintaticos = c.getErros();
-            if (erros_sintaticos.isEmpty()) {
+            System.out.println("Erros tamanho: " + erros_sintaticos.size() );
+            if (erros_sintaticos.size() > 0) {
                 outputTextArea.setForeground(Color.RED);
                 outText += "\n Análise Sintática apresentou erros.";
                 for (int i = 0; i < erros_sintaticos.size(); i++) {
-                    outText += "Simbolo esperado:" + erros_sintaticos.get(i).getSimboloEsperado() + " , " + erros_sintaticos.get(i).getDescricao() + "\n";
+                    outText += "\nErro após: " + erros_sintaticos.get(i).getSimboloEsperado().getLexema() + " na linha " +  erros_sintaticos.get(i).getLinha() +", " + erros_sintaticos.get(i).getDescricao() + "\n";
                 }
+                analise_lexica_ok = false;
+                analise_sintatica_ok = false;
+            }else{
+                outputTextArea.setForeground(Color.GREEN);
+                outText += "\n Análise Sintática compilada com sucesso!";
+                analise_sintatica_ok = true;
             }
             outputTextArea.setText(outText);
         } else {
